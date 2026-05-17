@@ -277,7 +277,7 @@ This project is licensed under the MIT License.
 Python Developer | AI Enthusiast | Automation Developer
 
 * GitHub: https://github.com/dibyanshub-glitch
-* LinkedIn: [https://linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
+* LinkedIn: [https://www.linkedin.com/in/ankit-dubey-61aab4338?utm_source=share_via&utm_content=profile&utm_medium=member_android]
 
 ---
 
