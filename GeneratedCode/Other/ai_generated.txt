@@ -1,0 +1,308 @@
+Here's a basic structure for an Android website portfolio with clean production-ready code. This example will include a navigation drawer, a list of projects, and a project details screen.
+
+**Project Structure:**
+
+```plain
+portfolio/
+app/
+src/
+main/
+java/
+com/example/portfolio/
+MainActivity.java
+Project.java
+ProjectAdapter.java
+ProjectDetailsActivity.java
+ProjectDetailsFragment.java
+navigation_drawer.xml
+activity_main.xml
+item_project.xml
+project_details.xml
+fragment_project_details.xml
+res/
+layout/
+activity_main.xml
+item_project.xml
+project_details.xml
+fragment_project_details.xml
+menu/
+navigation_drawer.xml
+values/
+strings.xml
+styles.xml
+AndroidManifest.xml
+build.gradle
+```
+
+**build.gradle:**
+
+```groovy
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdk 33
+    defaultConfig {
+        applicationId "com.example.portfolio"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+}
+```
+
+**MainActivity.java:**
+
+```java
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+public class MainActivity extends AppCompatActivity {
+
+    private AppBarConfiguration mAppBarConfiguration;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_projects, R.id.nav_about)
+                .setDrawerLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(drawer, navController);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+}
+```
+
+**Project.java:**
+
+```java
+public class Project {
+    private String title;
+    private String description;
+    private String image;
+
+    public Project(String title, String description, String image) {
+        this.title = title;
+        this.description = description;
+        this.image = image;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+}
+```
+
+**ProjectAdapter.java:**
+
+```java
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.portfolio.R;
+
+import java.util.ArrayList;
+
+public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHolder> {
+
+    private ArrayList<Project> projects;
+    private Context context;
+
+    public ProjectAdapter(ArrayList<Project> projects, Context context) {
+        this.projects = projects;
+        this.context = context;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_project, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Project project = projects.get(position);
+        holder.titleTextView.setText(project.getTitle());
+        holder.descriptionTextView.setText(project.getDescription());
+        holder.imageView.setImageResource(context.getResources().getIdentifier(project.getImage(), "drawable", context.getPackageName()));
+    }
+
+    @Override
+    public int getItemCount() {
+        return projects.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView titleTextView;
+        public TextView descriptionTextView;
+        public ImageView imageView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            titleTextView = itemView.findViewById(R.id.title_text_view);
+            descriptionTextView = itemView.findViewById(R.id.description_text_view);
+            imageView = itemView.findViewById(R.id.image_view);
+        }
+    }
+}
+```
+
+**ProjectDetailsActivity.java:**
+
+```java
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+public class ProjectDetailsActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_project_details);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Fragment fragment = new ProjectDetailsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.project_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
+```
+
+**ProjectDetailsFragment.java:**
+
+```java
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.fragment.app.Fragment;
+import com.example.portfolio.R;
+
+public class ProjectDetailsFragment extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_project_details, container, false);
+        ImageView imageView = view.findViewById(R.id.image_view);
+        TextView titleTextView = view.findViewById(R.id.title_text_view);
+        TextView descriptionTextView = view.findViewById(R.id.description_text_view);
+        // Set the image, title, and description based on the project ID
+        imageView.setImageResource(R.drawable.project_image);
+        titleTextView.setText("Project Title");
+        descriptionTextView.setText("Project Description");
+        return view;
+    }
+}
+```
+
+This code structure includes a navigation drawer, a list of projects, and a project details screen. The project details screen is implemented using a fragment, which is a good practice in Android development.
+
+Note that you will need to replace the placeholder project image, title, and description with the actual values for each project. You will also need to add the project images to the `drawable` folder in your project.
+
+Also, this is a basic structure and you may need to modify it based on your specific requirements.

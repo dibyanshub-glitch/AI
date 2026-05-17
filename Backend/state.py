@@ -1,0 +1,3 @@
+AUTONOMOUS_MODE = False
+MAIN_LOOP = None
+SHUTDOWN = False

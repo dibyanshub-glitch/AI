@@ -1,0 +1,1 @@
+Add-Type -AssemblyName presentationCore;$player = New-Object system.windows.media.mediaplayer;$player.open("C:\Windows\Media\Alarm01.wav");$player.Play();Start-Sleep -Seconds 10;

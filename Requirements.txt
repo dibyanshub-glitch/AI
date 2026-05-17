@@ -1,0 +1,37 @@
+pip install python-dotenv
+pip install groq
+pip install AppOpener
+pip install pywhatkit
+pip install bs4
+pip install pillow
+pip install rich
+pip install requests
+pip install keyboard
+pip install cohere
+pip install googlesearch-python
+pip install mtranslate
+pip install pygame
+pip install edge-tts
+pip install PyQt5
+pip install webdriver-manager
+pip install pyjoke
+pip install SpeechRecognition
+pip install pydub
+pip install pyttsx3
+pip install pyaudio
+pip install torch==2.2.2 torchaudio==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
+pip install soundfile
+pip install sentence-transformers
+pip install qasync
+pip install pygments
+pip install markdown
+pip install eel
+pip install faster-whisper sounddevice numpy
+pip install ctranslate2
+pip install noisereduce scipy
+pip install psutil
+pip install webrtcvad
+pip install pyautogui pygetwindow pyperclip pywinauto
+pip install opencv-python
+pip install bcrypt
+pip install language-tool-python
